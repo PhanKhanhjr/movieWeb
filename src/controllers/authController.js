@@ -33,11 +33,9 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
     try {
-        const { refreshToken } = req.body;
-        await authService.logout(refreshToken);
-        res.status(200).json({ message: "Logout successful" });
-    } catch (error) {
-        res.status(401).json({ message: error.message });
+        await authService.logout(req, res);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 };
 

@@ -64,4 +64,45 @@ const createUser = async (req, res) => {
         })
     }
 }
-export default {getAllUsers, createUser};
+
+const deleteUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        await userService.deleteUser(userId);
+        res.status(200).json({
+            message: `User with ID ${userId} has been deleted`,
+        })
+    }catch(error) {
+        res.status(500).json({
+            message: error.message,
+        })
+    }
+}
+
+const updateUser = async (req, res) => {
+    try {
+        const id =req.user.id;
+        const updatedData = req.body;
+        const allowedFields = ['password', 'name', 'gender', 'age', 'address'];
+        const filteredData = {};
+
+        for (const field of allowedFields) {
+            if (updatedData[field] !== undefined) {
+                filteredData[field] = updatedData[field];
+            }
+        }
+
+        const updateUser = await userService.updateUser(id, filteredData);
+        res.status(200).json({
+            statusCode: 200,
+            message: "Updated user",
+            data: updateUser
+        })
+    }catch(error) {
+        res.status(400).json({
+            message: error.message,
+        })
+    }
+
+}
+export default {getAllUsers, createUser, deleteUser, updateUser};

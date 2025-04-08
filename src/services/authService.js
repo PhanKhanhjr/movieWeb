@@ -32,27 +32,29 @@ const login = async (email, password) => {
     return {user, accessToken, refreshToken };
 }
 
-const logout = async (refreshToken) => {
-    if (!refreshToken) throw new Error("Refresh token is required");
-
-    let decoded;
-    try {
-        decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    } catch (err) {
-        throw new Error("Invalid refresh token");
+const logout = async (req, res) => {
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) {
+        throw new Error("Bad credentials");
     }
-
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     const user = await User.findById(decoded.id);
-    if (!user) throw new Error("User not found");
-
-    // Kiểm tra token có khớp không (chống token giả mạo)
-    if (user.refreshToken !== refreshToken) {
-        throw new Error("Token mismatch");
+    if (!user) {
+        throw new Error("Bad credentials");
     }
-
     user.refreshToken = null;
     await user.save();
-};
+    res.clearCookie("refreshToken",{
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Strict',
+        expiresIn: 0
+        }
+        );
+    res.status(200).json({
+        message: 'Logged out',
+    });
+}
 
 const refreshTokens = async (refreshToken) => {
     try {

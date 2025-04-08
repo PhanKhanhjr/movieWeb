@@ -23,7 +23,34 @@ const fetchUserByEmail = async (email) =>{
     }
 }
 
-const deleteUser = async (email) =>{
+const deleteUser = async (id) =>{
+    const user = await User.findById(id);
+    if(!user){
+        throw new Error("User does not exist");
+    }
+    await User.findByIdAndDelete(id);
 }
 
-export default {getAllUsers, createUser, fetchUserByEmail};
+const updateUser = async (id, userData) =>{
+    const user = await User.findById(id);
+    if(!user){
+        throw new Error("User does not exist");
+    }
+    if (userData.password){
+        const hashed = await bcrypt.hash(userData.password, 10);
+        userData.password = hashed
+    }
+    Object.assign(user, userData);
+    await user.save();
+    return {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        gender: user.gender,
+        age: user.age,
+        address: user.address
+    };
+}
+
+export default {getAllUsers, createUser, fetchUserByEmail, deleteUser, updateUser};
