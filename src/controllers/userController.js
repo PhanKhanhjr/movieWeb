@@ -1,8 +1,8 @@
-import UserService from "../services/UserService.js";
+import userService from "../services/userService.js";
 
 const getAllUsers = async (req, res) => {
     try {
-        const allUsers = await UserService.getAllUsers();
+        const allUsers = await userService.getAllUsers();
         return res.status(200).json(allUsers);
     } catch (error) {
         return res.status(500).json({
@@ -14,7 +14,7 @@ const getAllUsers = async (req, res) => {
 
 const findUserByEmail = async (req, res) => {
     try {
-        const user = await UserService.findOne({ email: req.params.email });
+        const user = await userService.findOne({ email: req.params.email });
         return res.status(200).json(
             {
                 statusCode: 200,
@@ -37,7 +37,7 @@ const findUserByEmail = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    let userDb = await UserService.fetchUserByEmail(req.body.email);
+    let userDb = await userService.fetchUserByEmail(req.body.email);
     if (userDb) {
         return res.status(409).json({
             statusCode: 409,
@@ -45,7 +45,7 @@ const createUser = async (req, res) => {
         })
     }
     try {
-        const user = await UserService.createUser(req.body);
+        const user = await userService.createUser(req.body);
         return res.status(201).json({
             statusCode: 201,
             message: "Created user",
