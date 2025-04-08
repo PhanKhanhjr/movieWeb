@@ -103,6 +103,20 @@ const updateUser = async (req, res) => {
             message: error.message,
         })
     }
-
 }
-export default {getAllUsers, createUser, deleteUser, updateUser};
+
+const changePassword = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const {currentPassword, newPassword} = req.body;
+        await userService.changePassword(userId, currentPassword, newPassword);
+        res.status(200).json({
+            message: `Password changed successfully`,
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: error.message,
+        })
+    }
+}
+export default {getAllUsers, createUser, deleteUser, updateUser, changePassword};

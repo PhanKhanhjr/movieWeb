@@ -53,4 +53,21 @@ const updateUser = async (id, userData) =>{
     };
 }
 
-export default {getAllUsers, createUser, fetchUserByEmail, deleteUser, updateUser};
+const changePassword = async (userId, currentPassword, newPassword) =>{
+    if(!currentPassword || !newPassword){
+        throw new Error("Missing required fields");
+    }
+    const user = await User.findById(userId)
+    if(!user){
+        throw new Error ("User not found");
+    }
+    const isMatch = await bcrypt.compare(currentPassword, user.password)
+    if(!isMatch){
+        throw new Error("Current password is incorrect");
+    }
+    const hashed = await bcrypt.hash(newPassword, 10);
+    user.password = hashed
+    await user.save();
+}
+
+export default {getAllUsers, createUser, fetchUserByEmail, deleteUser, updateUser, changePassword};
