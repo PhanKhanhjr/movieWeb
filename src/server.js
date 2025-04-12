@@ -2,16 +2,19 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import userRoutes from "./routes/userRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
+
 import path from "path";
 import { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 // Load .env từ thư mục cha (gốc)
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
-import connectDB from "./config/db.js";
+dotenv.config();
+import connectDB from "./utils/db.js";
 connectDB();
+
+import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import movieRoutes from "./routes/movieRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -22,6 +25,7 @@ app.use(cookieParser());
 
 app.use(userRoutes);
 app.use(authRoutes);
+app.use(movieRoutes)
 
 // Khởi động server
 const PORT = process.env.PORT || 8081;
