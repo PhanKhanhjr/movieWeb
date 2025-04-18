@@ -14,4 +14,14 @@ const getTrendingMovie = async(page = 1 ) => {
     return response.data;
 }
 
-export default {getPopularMovie, getTrendingMovie}
+const getMovieDetail = async(movieId, language = 'en-US') => {
+    const response = await tmdbAPI.get(`/movie/${movieId}`, {
+        params: {
+            language,
+            append_to_response: 'credits,videos,images,recommendations'
+        }
+    });
+    return response.data;
+}
+
+export default {getPopularMovie, getTrendingMovie, getMovieDetail}
