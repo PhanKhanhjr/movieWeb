@@ -37,4 +37,42 @@ const getVideo = async (id) => {
     return iframeSrc;
 };
 
-export default {getPopularMovie, getTrendingMovie, getUpcomingMovie, getMovieDetails, getVideo}
+const getMovieCredits = async (id) => {
+    const response = await tmdbAPI.get(`/movie/${id}/credits?language=vi-VN`);
+    return response.data;
+}
+const searchMovies = async (query, page = 1) => {
+    try {
+        const response = await axios.get(`${process.env.TMDB_URL_BASE}/search/multi`, {
+            headers: {
+                'Authorization': `Bearer ${process.env.TMDB_BEARER_TOKEN}`,
+                'Content-Type': 'application/json'
+            },
+            params: {
+                query,
+                language: 'vi-VN',
+                include_adult: false,
+                page
+            }
+        });
+
+        const results = response.data.results
+            .filter(item => item.media_type === 'movie' || item.media_type === 'tv')
+            .map(item => ({
+                id: item.id,
+                title: item.title || item.name || '',
+                original_title: item.title || item.name || '',
+                poster_path: item.poster_path,
+                backdrop_path: null,
+                release_date: item.release_date || item.first_air_date || '',
+                media_type: item.media_type,
+                overview: ''
+            }));
+
+        return { results };
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+export default {getPopularMovie, getTrendingMovie, getUpcomingMovie, getMovieDetails, getVideo, getMovieCredits, searchMovies}

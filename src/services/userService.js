@@ -31,8 +31,8 @@ const deleteUser = async (id) =>{
     await User.findByIdAndDelete(id);
 }
 
-const updateUser = async (id, userData) =>{
-    const user = await User.findById(id);
+const updateUser = async (email, userData) =>{
+    const user = await User.findOne({email});
     if(!user){
         throw new Error("User does not exist");
     }

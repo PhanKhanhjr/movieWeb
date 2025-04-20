@@ -81,7 +81,7 @@ const deleteUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const id =req.user.id;
+        const email =req.body.email;
         const updatedData = req.body;
         const allowedFields = ['password', 'name', 'gender', 'age', 'address'];
         const filteredData = {};
@@ -92,7 +92,7 @@ const updateUser = async (req, res) => {
             }
         }
 
-        const updateUser = await userService.updateUser(id, filteredData);
+        const updateUser = await userService.updateUser(email, filteredData);
         res.status(200).json({
             statusCode: 200,
             message: "Updated user",

@@ -52,4 +52,23 @@ const getUpcomingMovie = async (req, res) => {
     }
 }
 
-export default {getPopular, getTrending, getMovieDetail, getMovie, getUpcomingMovie};
+const getMovieCredits = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const response = await movieService.getMovieCredits(id);
+        res.status(200).json(response);
+    }catch(err) {
+        res.status(500).json({message: err.message,});
+    }
+}
+const searchMovies = async (req, res) => {
+    try {
+        const { query, page = 1 } = req.query;
+        const data = await movieService.searchMovies(query, page);
+        res.status(200).json(data);
+    } catch(err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export default {getPopular, getTrending, getMovieDetail, getMovie, getUpcomingMovie, getMovieCredits, searchMovies};

@@ -38,6 +38,32 @@ const logout = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+const register = async (req, res) => {
+    try {
+        const { email, password, name, gender, age, address } = req.body;
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: "Email đã tồn tại" });
+        }
+
+        const hashedPassword = await bcryptjs.hash(password, 10);
+        const newUser = new User({
+            email,
+            password: hashedPassword,
+            name,
+            role: "user",
+            gender,
+            age,
+            address,
+        });
+
+        await newUser.save();
+        res.status(201).json({ message: "Đăng ký thành công" });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
 
 const refreshToken = async (req, res) => {
     try {
@@ -67,4 +93,4 @@ const refreshToken = async (req, res) => {
     }
 };
 
-export default  {login, logout, refreshToken};
+export default  {login, logout, refreshToken, register};
