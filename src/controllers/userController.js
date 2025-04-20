@@ -119,4 +119,4 @@ const changePassword = async (req, res) => {
         })
     }
 }
-export default {getAllUsers, createUser, deleteUser, updateUser, changePassword};
+export default {getAllUsers, createUser, deleteUser, updateUser, changePassword, findUserByEmail};

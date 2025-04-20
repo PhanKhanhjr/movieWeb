@@ -15,6 +15,7 @@ connectDB();
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import movieRoutes from "./routes/movieRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -25,7 +26,8 @@ app.use(cookieParser());
 
 app.use(userRoutes);
 app.use(authRoutes);
-app.use(movieRoutes)
+app.use(movieRoutes);
+app.use("/api/v1/comment",commentRoutes);
 
 // Khởi động server
 const PORT = process.env.PORT || 8081;

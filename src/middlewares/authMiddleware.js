@@ -1,13 +1,11 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 const verifyToken = (req, res, next) => {
-    const authHeader = req.headers.authorization;
+    const token = req.cookies.accessToken;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!token) {
         return res.status(401).json({ message: "Access token missing or invalid" });
     }
-
-    const token = authHeader.split(" ")[1];
 
     try {
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
@@ -27,5 +25,4 @@ const requireRole = (role) => {
     };
 };
 
-
-export default {verifyToken, requireRole};
+export default { verifyToken, requireRole };
