@@ -9,4 +9,5 @@ router.post("/api/v1/users", userController.createUser);
 router.delete("/api/v1/users/:id", userController.deleteUser);
 router.put("/api/v1/users", userController.updateUser);
 router.post("/api/v1/users/changepassword", userController.changePassword);
+// router.post("/api/v1/finduser", userController.findById);
 export default router;

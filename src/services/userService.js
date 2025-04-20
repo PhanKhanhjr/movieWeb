@@ -23,6 +23,7 @@ const fetchUserByEmail = async (email) =>{
     }
 }
 
+
 const deleteUser = async (id) =>{
     const user = await User.findById(id);
     if(!user){
