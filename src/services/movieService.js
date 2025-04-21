@@ -31,11 +31,31 @@ const getMovieDetails = async(id) => {
 
 const getVideo = async (id) => {
     const baseURL = process.env.VIDSRC_URL_BASE;
-    const response = await axios.get(`${baseURL}${id}`);
-    const $ = cheerio.load(response.data);
-    const iframeSrc = $('#player_iframe').attr('src');
-    return iframeSrc;
+
+    try {
+        const response = await axios.get(`${baseURL}${id}`, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                'Accept-Language': 'en-US,en;q=0.9',
+            }
+        });
+
+        const $ = cheerio.load(response.data);
+        const iframeSrc = $('#player_iframe').attr('src');
+
+        if (!iframeSrc) {
+            console.warn("Không tìm thấy iframeSrc trong trang", id);
+            throw new Error("Không tìm thấy iframeSrc");
+        }
+
+        return iframeSrc;
+
+    } catch (err) {
+        console.error("getVideo error:", err.message);
+        throw err;
+    }
 };
+
 
 const getMovieCredits = async (id) => {
     const response = await tmdbAPI.get(`/movie/${id}/credits?language=vi-VN`);
