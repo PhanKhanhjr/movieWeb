@@ -20,7 +20,7 @@ import commentRoutes from "./routes/commentRoutes.js";
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: true, // origin của frontend
+    origin: 'https://movieweb1302.netlify.app', // origin của frontend
     credentials: true, // cho phép gửi cookie/token qua
 })); // Cho phép CORS
 app.use(cookieParser());
